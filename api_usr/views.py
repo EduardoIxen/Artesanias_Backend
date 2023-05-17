@@ -130,3 +130,19 @@ def realizar_pedido(request):
         return JsonResponse({'message': 'Pedido realizado', 'id': pedido.key}, status=200)
     except Exception as e:
         return JsonResponse({'message': 'Error al realizar el pedido'}, status=500)
+    
+
+@csrf_exempt
+@require_http_methods(['POST'])
+def logout(request):
+    try:
+        data = json.loads(request.body)
+        payload = {
+            "email": data['email'],
+            "nombre": data['nombre']
+        }
+
+        generate_jwt(payload) #Para que el token del login sea invalidado
+        return JsonResponse({'message': 'Logout exitoso'}, status=200)
+    except Exception as e:
+        return JsonResponse({'message': "Error al cerrar sesion"}, status=500)
